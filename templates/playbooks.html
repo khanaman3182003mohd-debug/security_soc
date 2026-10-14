@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block title %}Playbooks{% endblock %}
+{% block breadcrumb %}Playbooks{% endblock %}
+{% block content %}
+<div class="page-heading"><div><span class="eyebrow">ORCHESTRATE WITH CONFIDENCE</span><h1>Response playbooks</h1><p>Structured workflows for consistent incident response.</p></div><span class="count-chip">{{ playbooks|length }} workflows</span></div>
+<div class="notice"><span aria-hidden="true">ⓘ</span><div><strong>Preview only. No actions are executed.</strong><p>All playbooks run as local dry-run previews. No hosts are isolated, accounts disabled, or external services contacted.</p></div></div>
+<div class="playbook-grid">{% for slug, playbook in playbooks.items() %}<article class="panel playbook-card"><div class="card-top"><span class="playbook-icon" aria-hidden="true">⌘</span><span class="badge neutral">DRY RUN</span></div><h2>{{ playbook.name }}</h2><p>{{ playbook.description }}</p><ol class="step-list">{% for step in playbook.steps %}<li>{{ step }}</li>{% endfor %}</ol><form action="{{ url_for('preview_playbook', slug=slug) }}" method="post" class="playbook-form"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button type="submit" class="button secondary full-width">Preview workflow <span aria-hidden="true">→</span></button><p class="form-feedback" role="status" aria-live="polite"></p></form></article>{% else %}<section class="panel empty-state"><h2>No playbooks available</h2><p>Configured response workflows will appear here.</p></section>{% endfor %}</div>
+<section class="panel preview-panel" id="playbook-preview" aria-labelledby="preview-title" tabindex="-1" hidden><div class="panel-heading"><div><span class="eyebrow">DRY-RUN RESULT</span><h2 id="preview-title">Workflow preview</h2><p>No external actions were performed.</p></div><span class="badge status-resolved">Preview ready</span></div><ol id="preview-steps" class="step-list panel-body"></ol></section>
+{% endblock %}

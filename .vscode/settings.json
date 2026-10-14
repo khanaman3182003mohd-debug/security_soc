@@ -1,0 +1,8 @@
+{
+  "python.defaultInterpreterPath": "C:\\Users\\khan\\AppData\\Local\\Programs\\Python\\Python315\\python.exe",
+  "python.terminal.activateEnvironment": true,
+  "files.exclude": {
+    "**/__pycache__": true,
+    "**/instance": true
+  }
+}

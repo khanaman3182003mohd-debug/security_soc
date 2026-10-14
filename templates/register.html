@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}Create account{% endblock %}
+{% block breadcrumb %}Create account{% endblock %}
+{% block content %}
+<div class="login-layout">
+  <section class="login-intro" aria-label="Workspace information">
+    <div class="brand login-brand"><span class="brand-mark" aria-hidden="true">S</span><span>SENTINEL<small>SECURITY OPERATIONS</small></span></div>
+    <span class="eyebrow">JOIN THE WORKSPACE</span>
+    <h1>Make every<br><span>signal count.</span></h1>
+    <p>Create your account to track events, collaborate on investigations, and keep response decisions accountable.</p>
+    <div class="login-features">
+      <span>Clear incident ownership</span>
+      <span>Investigation notes and audit history</span>
+      <span>Human-led response approvals</span>
+    </div>
+    <div class="demo-note"><span class="status-dot"></span><span><strong>Read-only by default</strong><small>New accounts start with Viewer access</small></span></div>
+  </section>
+  <section class="panel login-card" aria-labelledby="create-account-title">
+    <span class="eyebrow">ACCOUNT REGISTRATION</span>
+    <h2 id="create-account-title">Create your account</h2>
+    <p class="muted">Set up secure access to the workspace.</p>
+    <form method="post" action="{{ url_for('register') }}" class="form-stack">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <label for="username">Username</label>
+      <input id="username" name="username" autocomplete="username" required maxlength="80" minlength="3">
+      <label for="email">Email <span class="optional-label">Optional</span></label>
+      <input id="email" name="email" type="email" autocomplete="email" maxlength="120">
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" autocomplete="new-password" required minlength="12" aria-describedby="reg-help">
+      <small id="reg-help" class="muted">Use at least 12 characters.</small>
+      <label for="confirm">Confirm password</label>
+      <input id="confirm" name="confirm" type="password" autocomplete="new-password" required minlength="12">
+      <button class="button primary full-width" type="submit">Create account <span aria-hidden="true">→</span></button>
+    </form>
+    <p class="fine-print">Already have an account? <a href="{{ url_for('login') }}">Sign in</a>.</p>
+    <p class="auth-assurance"><span aria-hidden="true">◈</span> Your password is stored as a secure hash, never as plain text.</p>
+  </section>
+</div>
+{% endblock %}

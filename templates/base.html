@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <meta name="color-scheme" content="dark light">
+  <title>{% block title %}Sentinel{% endblock %} · SOAR workspace</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  {% if user %}
+  <aside class="sidebar" aria-label="Workspace navigation">
+    <a class="brand" href="{{ url_for('dashboard') }}"><span class="brand-mark" aria-hidden="true">S</span><span>SENTINEL<small>SECURITY OPERATIONS</small></span></a>
+    <div class="workspace-label">WORKSPACE <span class="version">LOCAL</span></div>
+    <nav class="nav-list" aria-label="Main">
+    {% for endpoint, label, icon in [('dashboard','Overview','◈'),('incidents','Incidents','◎'),('playbooks','Playbooks','⌘'),('integrations','Integrations','⊞'),('reports','Reports','▥')] %}
+      <a href="{{ url_for(endpoint) }}" class="nav-link{% if request.endpoint == endpoint %} active{% endif %}" {% if request.endpoint == endpoint %}aria-current="page"{% endif %}><span aria-hidden="true">{{ icon }}</span>{{ label }}</a>
+    {% endfor %}
+      <a href="{{ url_for('approvals') }}" class="nav-link{% if request.endpoint == 'approvals' %} active{% endif %}" {% if request.endpoint == 'approvals' %}aria-current="page"{% endif %}><span aria-hidden="true">✔</span>Approvals{% if pending_approvals %}<span class="nav-badge" aria-label="{{ pending_approvals }} pending">{{ pending_approvals }}</span>{% endif %}</a>
+    {% if user.role == 'admin' %}<a href="{{ url_for('admin') }}" class="nav-link{% if request.endpoint == 'admin' %} active{% endif %}" {% if request.endpoint == 'admin' %}aria-current="page"{% endif %}><span aria-hidden="true">⚙</span>Administration</a>{% endif %}
+    </nav>
+    <div class="sidebar-bottom"><div class="environment"><span class="status-dot"></span>Local workspace<small>No live response actions</small></div><div class="profile"><span class="avatar">{{ user.username[:1]|upper }}</span><span class="profile-name">{{ user.username }}<small>{{ user.role|capitalize }}</small></span><a class="icon-button" href="{{ url_for('change_password') }}" title="Change password" aria-label="Change password">🔑</a><form action="{{ url_for('logout') }}" method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="icon-button" title="Sign out" aria-label="Sign out" type="submit">↗</button></form></div></div>
+  </aside>
+  {% endif %}
+  <div class="app-shell{% if not user %} guest-shell{% endif %}">
+  <header class="topbar"><span class="topbar-accent" aria-hidden="true"></span><div><span class="breadcrumb">{% if user %}Workspace <span aria-hidden="true">/</span> {% endif %}{% block breadcrumb %}Sentinel{% endblock %}</span></div><div class="topbar-actions"><span class="local-badge">{% if user %}SESSION PROTECTED{% else %}LOCAL DEMO{% endif %}</span><button type="button" class="theme-toggle" id="theme-toggle" aria-label="Switch to dark theme">Dark mode</button></div></header>
+    <main id="main" class="main-content" tabindex="-1">
+      {% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}<div class="flash-stack" aria-live="polite">{% for category, message in messages %}<div class="flash {{ category }}" role="status">{{ message }}</div>{% endfor %}</div>{% endif %}{% endwith %}
+      {% block content %}{% endblock %}
+    </main>
+    <footer class="page-footer"><span>Sentinel · Security orchestration workspace</span><span>Local data. Human-led decisions.</span></footer>
+  </div>
+  {% if user %}
+  <section class="assistant-panel" id="assistant-panel" aria-labelledby="assistant-title" hidden>
+    <div class="assistant-heading"><div><h2 id="assistant-title">Workspace assistant</h2><p>Local rules · Not AI or live intelligence</p></div><button type="button" id="assistant-close" class="icon-button" aria-label="Close assistant">×</button></div>
+    <div class="assistant-messages" id="assistant-messages" role="log" aria-live="polite" aria-label="Assistant conversation"><p class="assistant-message">Ask about incidents, playbooks, or navigating this workspace. Responses are rule-based; no external AI service is connected.</p></div>
+    <form id="assistant-form"><label class="sr-only" for="assistant-input">Your question</label><div class="assistant-input-row"><input id="assistant-input" name="message" placeholder="Ask a workspace question…" maxlength="1000" required autocomplete="off"><button type="submit" class="button primary">Send</button></div></form>
+  </section>
+  <button type="button" class="assistant-launcher" id="assistant-toggle" aria-controls="assistant-panel" aria-expanded="false"><span aria-hidden="true">✧</span> Assistant</button>
+  {% endif %}
+</body>
+</html>

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}Sign in{% endblock %}
+{% block breadcrumb %}Secure access{% endblock %}
+{% block content %}
+<div class="login-layout">
+  <section class="login-intro" aria-label="Workspace information">
+    <div class="brand login-brand"><span class="brand-mark" aria-hidden="true">S</span><span>SENTINEL<small>SECURITY OPERATIONS</small></span></div>
+    <span class="eyebrow">SECURITY OPERATIONS WORKSPACE</span>
+    <h1>Investigate with<br><span>clarity.</span></h1>
+    <p>One calm, focused workspace for incident triage, investigation notes, and human-approved response.</p>
+    <div class="login-features">
+      <span>Incident tracking and investigation</span>
+      <span>Auditable, role-based access</span>
+      <span>Safe playbook previews</span>
+    </div>
+    <div class="demo-note"><span class="status-dot"></span><span><strong>Protected workspace</strong><small>Local demo · no live response actions</small></span></div>
+  </section>
+  <section class="panel login-card" aria-labelledby="sign-in-title">
+    <span class="eyebrow">SECURE ACCESS</span>
+    <h2 id="sign-in-title">Welcome back</h2>
+    <p class="muted">Sign in with your workspace account.</p>
+    <form method="post" action="{{ url_for('login') }}" class="form-stack">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <label for="username">Username</label>
+      <input id="username" name="username" autocomplete="username" required maxlength="80" autofocus>
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" autocomplete="current-password" required>
+      <button class="button primary full-width" type="submit">Sign in <span aria-hidden="true">→</span></button>
+    </form>
+    {% if google_enabled %}<div class="oauth-divider"><span>or</span></div><a class="button secondary full-width google-btn" href="{{ url_for('google_login') }}"><span class="google-icon" aria-hidden="true">G</span> Continue with Google</a>{% endif %}
+    <p class="fine-print">{% if allow_registration %}New to the workspace? <a href="{{ url_for('register') }}">Create an account</a>.{% else %}Access is restricted to authorized workspace users.{% endif %}</p>
+    <p class="auth-assurance"><span aria-hidden="true">◈</span> Passwords are securely hashed. Sessions expire after 30 minutes.</p>
+  </section>
+</div>
+{% endblock %}

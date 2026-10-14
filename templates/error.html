@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% block title %}Error {{ code }}{% endblock %}
+{% block breadcrumb %}Request unavailable{% endblock %}
+{% block content %}
+<section class="panel error-card"><span class="eyebrow">REQUEST UNAVAILABLE</span><div class="error-code">{{ code }}</div><h1>We couldn’t complete that request.</h1><p>{{ message }}</p><a href="{{ url_for('dashboard') if user else url_for('login') }}" class="button primary">{{ 'Back to overview' if user else 'Back to sign in' }} →</a></section>
+{% endblock %}

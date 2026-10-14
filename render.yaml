@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: soar-sentinel
+    runtime: python
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "bash render-start.sh"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: SECRET_KEY
+        generateValue: true

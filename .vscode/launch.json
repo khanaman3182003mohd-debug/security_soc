@@ -1,0 +1,30 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run SOAR Sentinel (Flask)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/app.py",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "justMyCode": true,
+      "env": {
+        "FLASK_DEBUG": "0"
+      }
+    },
+    {
+      "name": "Run + Open Browser",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/app.py",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "serverReadyAction": {
+        "pattern": "Running on http://127.0.0.1:5000",
+        "uri": "http://127.0.0.1:5000/login",
+        "action": "openExternally"
+      }
+    }
+  ]
+}
